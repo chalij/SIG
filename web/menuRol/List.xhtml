@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="MenuRolListForm">
+
+        <p:panel header="#{myBundle.ListMenuRolTitle}">
+            <p:contextMenu id="MenuRolDataTableContextMenu" for="datalist">  
+                <p:menuitem value="#{myBundle.Create}" onclick="document.getElementById('MenuRolListForm:createButton').click();" icon="ui-icon-plus"/>
+                <p:menuitem value="#{myBundle.View}" onclick="document.getElementById('MenuRolListForm:viewButton').click();" icon="ui-icon-search"/>
+                <p:menuitem value="#{myBundle.Edit}" onclick="document.getElementById('MenuRolListForm:editButton').click();" icon="ui-icon-pencil"/>
+                <p:menuitem value="#{myBundle.Delete}" onclick="document.getElementById('MenuRolListForm:deleteButton').click();" icon="ui-icon-trash"/>
+                <p:separator/>
+                <p:menuitem value="#{myBundle.MenuRolMenuItem_idRol}" icon="ui-icon-search"  actionListener="#{menuRolController.prepareIdRol}" update=":RolViewForm" oncomplete="PF('RolViewDialog').show()" disabled="#{empty menuRolController.selected.idRol}"/>  
+                <p:menuitem value="#{myBundle.MenuRolMenuItem_idMenu}" icon="ui-icon-search"  actionListener="#{menuRolController.prepareIdMenu}" update=":MenuViewForm" oncomplete="PF('MenuViewDialog').show()" disabled="#{empty menuRolController.selected.idMenu}"/>  
+            </p:contextMenu>
+            <p:dataTable id="datalist"
+                         value="#{menuRolController.items}"
+                         lazy="false"
+                         rowKey="#{item.idMenuRol}"
+                         var="item"
+                         paginator="true"
+                         rows="10"
+                         rowsPerPageTemplate="5,10,15"
+                         selectionMode="single"
+                         selection="#{menuRolController.selected}">
+                <!--
+                         To enable Lazy Loading, please copy/replace the following lines above,
+                         and be sure to replace the word HASH with the # symbol:
+                
+                         value="HASH{menuRolController.lazyItems}"
+                         lazy="true"
+                         rowKey="HASH{item.idMenuRol}"  <<< Remove this line
+                -->
+
+
+                <p:ajax event="rowSelect"   update="@form:createButton,@form:viewButton,@form:editButton,@form:deleteButton,@form:MenuRolDataTableContextMenu" listener="#{menuRolController.resetParents}"/>
+                <p:ajax event="rowUnselect" update="@form:createButton,@form:viewButton,@form:editButton,@form:deleteButton,@form:MenuRolDataTableContextMenu" listener="#{menuRolController.resetParents}"/>
+                <p:ajax event="contextMenu" update="@form:createButton @form:viewButton @form:editButton @form:deleteButton" listener="#{menuRolController.resetParents}"/>
+                <p:ajax event="rowDblselect" onsuccess="document.getElementById('MenuRolListForm:viewButton').click();"/>
+
+                <p:column sortBy="#{item.idMenuRol}" filterBy="#{item.idMenuRol}">
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListMenuRolTitle_idMenuRol}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.idMenuRol}"/>
+                </p:column>
+
+
+                <p:column sortBy="#{item.eliminado}" filterBy="#{item.eliminado}">
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListMenuRolTitle_eliminado}"/>
+                    </f:facet>
+                    <h:selectBooleanCheckbox id="eliminado" value="#{item.eliminado}" title="#{myBundle.EditMenuRolTitle_eliminado}"  disabled="true"/>
+                </p:column>
+
+
+                <p:column sortBy="#{item.idRol.idRol}" filterBy="#{item.idRol.idRol}">
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListMenuRolTitle_idRol}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.idRol.idRol}"/>
+                </p:column>
+
+
+                <p:column sortBy="#{item.idMenu.descripcion}" filterBy="#{item.idMenu.descripcion}">
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListMenuRolTitle_idMenu}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.idMenu.descripcion}"/>
+                </p:column>
+
+
+            </p:dataTable>
+
+            <p:commandButton id="createButton"                             icon="ui-icon-plus"   value="#{myBundle.Create}" actionListener="#{menuRolController.prepareCreate}" update=":MenuRolCreateForm" oncomplete="PF('MenuRolCreateDialog').show()"/>
+            <p:commandButton id="viewButton"   style="visibility: hidden;" icon="ui-icon-search" value="#{myBundle.View}" update=":MenuRolViewForm" oncomplete="PF('MenuRolViewDialog').show()" disabled="#{empty menuRolController.selected}"/>
+            <p:commandButton id="editButton"   style="visibility: hidden;" icon="ui-icon-pencil" value="#{myBundle.Edit}" update=":MenuRolEditForm" oncomplete="PF('MenuRolEditDialog').show()" disabled="#{empty menuRolController.selected}"/>
+            <p:commandButton id="deleteButton" style="visibility: hidden;" icon="ui-icon-trash"  value="#{myBundle.Delete}" actionListener="#{menuRolController.delete}" update=":growl,datalist" disabled="#{empty menuRolController.selected}">
+                <p:confirm header="#{myBundle.ConfirmationHeader}" message="#{myBundle.ConfirmDeleteMessage}" icon="ui-icon-alert"/>
+            </p:commandButton>
+
+        </p:panel>
+        <ui:include src="/confirmation.xhtml"/>
+    </h:form>
+
+</ui:composition>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pm="http://primefaces.org/mobile">
+
+    <pm:page id="PersonaCreatePage" lazy="true">
+        <pm:header title="#{myBundle.CreatePersonaTitle}">
+            <h:form>
+                <p:commandButton styleClass="ui-btn-left ui-btn-inline" value="#{myBundle.Cancel}" icon="ui-icon-arrow-l" action="#{mobilePageController.navigateBackInHistory('pm:PersonaListPage')}"/>
+            </h:form>
+        </pm:header>
+
+        <pm:content>
+
+            <h:form id="PersonaCreateForm">
+
+                <h:panelGroup id="display" rendered="#{personaController.selected != null}">
+                    <p:outputPanel>
+
+                        <pm:field>
+                            <p:outputLabel value="#{myBundle.CreatePersonaLabel_nombre}" for="nombre" />
+                            <p:inputTextarea rows="4" cols="30" id="nombre" value="#{personaController.selected.nombre}" title="#{myBundle.CreatePersonaTitle_nombre}" required="true" requiredMessage="#{myBundle.CreatePersonaRequiredMessage_nombre}"/>
+                        </pm:field>
+
+                        <pm:field>
+                            <p:outputLabel value="#{myBundle.CreatePersonaLabel_apellidos}" for="apellidos" />
+                            <p:inputTextarea rows="4" cols="30" id="apellidos" value="#{personaController.selected.apellidos}" title="#{myBundle.CreatePersonaTitle_apellidos}" required="true" requiredMessage="#{myBundle.CreatePersonaRequiredMessage_apellidos}"/>
+                        </pm:field>
+
+                        <pm:field>
+                            <p:outputLabel value="#{myBundle.CreatePersonaLabel_telefono}" for="telefono" />
+                            <p:inputText id="telefono" value="#{personaController.selected.telefono}" title="#{myBundle.CreatePersonaTitle_telefono}" size="8" maxlength="8"/>
+                        </pm:field>
+
+                        <pm:field>
+                            <p:outputLabel value="#{myBundle.CreatePersonaLabel_email}" for="email" />
+                            <p:inputTextarea rows="4" cols="30" id="email" value="#{personaController.selected.email}" title="#{myBundle.CreatePersonaTitle_email}" />
+                        </pm:field>
+
+                        <pm:field>
+                            <p:outputLabel value="#{myBundle.CreatePersonaLabel_eliminado}" for="eliminado" />
+                            <p:selectBooleanCheckbox id="eliminado" value="#{personaController.selected.eliminado}" />
+                        </pm:field>
+                    </p:outputPanel>
+                    <p:commandButton actionListener="#{personaController.saveNew}" value="#{myBundle.Save}" update="display,:PersonaListPage:PersonaListForm:datalist,:growl" action="#{mobilePageController.navigateWithHistory('pm:PersonaListPage')}"/>
+
+                </h:panelGroup>
+
+            </h:form>
+
+        </pm:content>
+
+    </pm:page>
+
+</ui:composition>

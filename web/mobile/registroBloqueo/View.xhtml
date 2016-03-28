@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pm="http://primefaces.org/mobile">
+
+    <pm:page id="RegistroBloqueoViewPage" lazy="true">
+        <pm:header title="#{myBundle.ViewRegistroBloqueoTitle}">
+            <h:form>
+                <p:commandButton styleClass="ui-btn-left ui-btn-inline" value="#{myBundle.Cancel}" icon="ui-icon-arrow-l" action="#{mobilePageController.navigateBackInHistory('pm:RegistroBloqueoListPage')}"/>
+            </h:form>
+        </pm:header>
+
+        <pm:content>
+
+            <h:form id="RegistroBloqueoViewForm">
+
+                <h:panelGroup id="display">
+                    <p:outputPanel rendered="#{registroBloqueoController.selected != null}">
+
+                        <pm:field>
+                            <h:outputText value="#{myBundle.ViewRegistroBloqueoLabel_idRegistroBloqueo}"/>
+                            <h:outputText value="#{registroBloqueoController.selected.idRegistroBloqueo}" title="#{myBundle.ViewRegistroBloqueoTitle_idRegistroBloqueo}"/>
+                        </pm:field>
+
+                        <pm:field>
+                            <h:outputText value="#{myBundle.ViewRegistroBloqueoLabel_intentosFallidos}"/>
+                            <h:outputText value="#{registroBloqueoController.selected.intentosFallidos}" title="#{myBundle.ViewRegistroBloqueoTitle_intentosFallidos}"/>
+                        </pm:field>
+
+                        <pm:field>
+                            <h:outputText value="#{myBundle.ViewRegistroBloqueoLabel_fecha}"/>
+                            <h:outputText value="#{registroBloqueoController.selected.fecha}" title="#{myBundle.ViewRegistroBloqueoTitle_fecha}">
+                                <f:convertDateTime pattern="MM/dd/yyyy" />
+                            </h:outputText>
+                        </pm:field>
+
+                        <pm:field>
+                            <h:outputText value="#{myBundle.ViewRegistroBloqueoLabel_ip}"/>
+                            <h:outputText value="#{registroBloqueoController.selected.ip}" title="#{myBundle.ViewRegistroBloqueoTitle_ip}"/>
+                        </pm:field>
+
+                        <pm:field>
+                            <h:outputText value="#{myBundle.ViewRegistroBloqueoLabel_eliminado}"/>
+                            <h:selectBooleanCheckbox id="eliminado" value="#{registroBloqueoController.selected.eliminado}" title="#{myBundle.EditRegistroBloqueoTitle_eliminado}"  disabled="true"/>
+                        </pm:field>
+
+                        <pm:field>
+                            <h:outputText value="#{myBundle.ViewRegistroBloqueoLabel_idUsuario}"/>
+                            <h:outputText value="#{registroBloqueoController.selected.idUsuario.idUsuario}"/>
+                        </pm:field>
+                    </p:outputPanel>
+                </h:panelGroup>
+
+            </h:form>
+
+        </pm:content>
+
+    </pm:page>
+
+</ui:composition>

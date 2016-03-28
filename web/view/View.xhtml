@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="ViewViewDlg" widgetVar="ViewViewDialog" modal="true" resizable="false"  appendTo="@(body)" header="#{myBundle.ViewViewTitle}" closeOnEscape="true">
+
+            <h:form id="ViewViewForm">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" columnClasses="column" rendered="#{viewController.selected != null}">
+
+                        <h:outputText value="#{myBundle.ViewViewLabel_idView}"/>
+                        <h:outputText value="#{viewController.selected.idView}" title="#{myBundle.ViewViewTitle_idView}"/>
+
+                        <h:outputText value="#{myBundle.ViewViewLabel_url}"/>
+                        <h:outputText value="#{viewController.selected.url}" title="#{myBundle.ViewViewTitle_url}"/>
+
+                        <h:outputText value="#{myBundle.ViewViewLabel_eliminado}"/>
+                        <h:selectBooleanCheckbox id="eliminado" value="#{viewController.selected.eliminado}" title="#{myBundle.EditViewTitle_eliminado}"  disabled="true"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{myBundle.Close}" onclick="PF('ViewViewDialog').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

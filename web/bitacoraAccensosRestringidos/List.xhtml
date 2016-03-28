@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="BitacoraAccensosRestringidosListForm">
+
+        <p:panel header="#{myBundle.ListBitacoraAccensosRestringidosTitle}">
+            <p:contextMenu id="BitacoraAccensosRestringidosDataTableContextMenu" for="datalist">  
+                <p:menuitem value="#{myBundle.Create}" onclick="document.getElementById('BitacoraAccensosRestringidosListForm:createButton').click();" icon="ui-icon-plus"/>
+                <p:menuitem value="#{myBundle.View}" onclick="document.getElementById('BitacoraAccensosRestringidosListForm:viewButton').click();" icon="ui-icon-search"/>
+                <p:menuitem value="#{myBundle.Edit}" onclick="document.getElementById('BitacoraAccensosRestringidosListForm:editButton').click();" icon="ui-icon-pencil"/>
+                <p:menuitem value="#{myBundle.Delete}" onclick="document.getElementById('BitacoraAccensosRestringidosListForm:deleteButton').click();" icon="ui-icon-trash"/>
+                <p:separator/>
+                <p:menuitem value="#{myBundle.BitacoraAccensosRestringidosMenuItem_idUsuario}" icon="ui-icon-search"  actionListener="#{bitacoraAccensosRestringidosController.prepareIdUsuario}" update=":UsuarioViewForm" oncomplete="PF('UsuarioViewDialog').show()" disabled="#{empty bitacoraAccensosRestringidosController.selected.idUsuario}"/>  
+            </p:contextMenu>
+            <p:dataTable id="datalist"
+                         value="#{bitacoraAccensosRestringidosController.items}"
+                         lazy="false"
+                         rowKey="#{item.idBitacoraAccensosRestringid}"
+                         var="item"
+                         paginator="true"
+                         rows="10"
+                         rowsPerPageTemplate="5,10,15"
+                         selectionMode="single"
+                         selection="#{bitacoraAccensosRestringidosController.selected}">
+                <!--
+                         To enable Lazy Loading, please copy/replace the following lines above,
+                         and be sure to replace the word HASH with the # symbol:
+                
+                         value="HASH{bitacoraAccensosRestringidosController.lazyItems}"
+                         lazy="true"
+                         rowKey="HASH{item.idBitacoraAccensosRestringid}"  <<< Remove this line
+                -->
+
+
+                <p:ajax event="rowSelect"   update="@form:createButton,@form:viewButton,@form:editButton,@form:deleteButton,@form:BitacoraAccensosRestringidosDataTableContextMenu" listener="#{bitacoraAccensosRestringidosController.resetParents}"/>
+                <p:ajax event="rowUnselect" update="@form:createButton,@form:viewButton,@form:editButton,@form:deleteButton,@form:BitacoraAccensosRestringidosDataTableContextMenu" listener="#{bitacoraAccensosRestringidosController.resetParents}"/>
+                <p:ajax event="contextMenu" update="@form:createButton @form:viewButton @form:editButton @form:deleteButton" listener="#{bitacoraAccensosRestringidosController.resetParents}"/>
+                <p:ajax event="rowDblselect" onsuccess="document.getElementById('BitacoraAccensosRestringidosListForm:viewButton').click();"/>
+
+                <p:column sortBy="#{item.idBitacoraAccensosRestringid}" filterBy="#{item.idBitacoraAccensosRestringid}">
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListBitacoraAccensosRestringidosTitle_idBitacoraAccensosRestringid}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.idBitacoraAccensosRestringid}"/>
+                </p:column>
+
+
+                <p:column sortBy="#{item.urlSinPremisos}" filterBy="#{item.urlSinPremisos}">
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListBitacoraAccensosRestringidosTitle_urlSinPremisos}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.urlSinPremisos}"/>
+                </p:column>
+
+
+                <p:column sortBy="#{item.fecha}" filterBy="#{item.fecha}">
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListBitacoraAccensosRestringidosTitle_fecha}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.fecha}">
+                        <f:convertDateTime pattern="MM/dd/yyyy" />
+                    </h:outputText>
+                </p:column>
+
+
+                <p:column sortBy="#{item.eliminado}" filterBy="#{item.eliminado}">
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListBitacoraAccensosRestringidosTitle_eliminado}"/>
+                    </f:facet>
+                    <h:selectBooleanCheckbox id="eliminado" value="#{item.eliminado}" title="#{myBundle.EditBitacoraAccensosRestringidosTitle_eliminado}"  disabled="true"/>
+                </p:column>
+
+
+                <p:column sortBy="#{item.idUsuario.idUsuario}" filterBy="#{item.idUsuario.idUsuario}">
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListBitacoraAccensosRestringidosTitle_idUsuario}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.idUsuario.idUsuario}"/>
+                </p:column>
+
+
+            </p:dataTable>
+
+            <p:commandButton id="createButton"                             icon="ui-icon-plus"   value="#{myBundle.Create}" actionListener="#{bitacoraAccensosRestringidosController.prepareCreate}" update=":BitacoraAccensosRestringidosCreateForm" oncomplete="PF('BitacoraAccensosRestringidosCreateDialog').show()"/>
+            <p:commandButton id="viewButton"   style="visibility: hidden;" icon="ui-icon-search" value="#{myBundle.View}" update=":BitacoraAccensosRestringidosViewForm" oncomplete="PF('BitacoraAccensosRestringidosViewDialog').show()" disabled="#{empty bitacoraAccensosRestringidosController.selected}"/>
+            <p:commandButton id="editButton"   style="visibility: hidden;" icon="ui-icon-pencil" value="#{myBundle.Edit}" update=":BitacoraAccensosRestringidosEditForm" oncomplete="PF('BitacoraAccensosRestringidosEditDialog').show()" disabled="#{empty bitacoraAccensosRestringidosController.selected}"/>
+            <p:commandButton id="deleteButton" style="visibility: hidden;" icon="ui-icon-trash"  value="#{myBundle.Delete}" actionListener="#{bitacoraAccensosRestringidosController.delete}" update=":growl,datalist" disabled="#{empty bitacoraAccensosRestringidosController.selected}">
+                <p:confirm header="#{myBundle.ConfirmationHeader}" message="#{myBundle.ConfirmDeleteMessage}" icon="ui-icon-alert"/>
+            </p:commandButton>
+
+        </p:panel>
+        <ui:include src="/confirmation.xhtml"/>
+    </h:form>
+
+</ui:composition>

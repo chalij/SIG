@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="RegistroBloqueoListForm">
+
+        <p:panel header="#{myBundle.ListRegistroBloqueoTitle}">
+            <p:contextMenu id="RegistroBloqueoDataTableContextMenu" for="datalist">  
+                <p:menuitem value="#{myBundle.Create}" onclick="document.getElementById('RegistroBloqueoListForm:createButton').click();" icon="ui-icon-plus"/>
+                <p:menuitem value="#{myBundle.View}" onclick="document.getElementById('RegistroBloqueoListForm:viewButton').click();" icon="ui-icon-search"/>
+                <p:menuitem value="#{myBundle.Edit}" onclick="document.getElementById('RegistroBloqueoListForm:editButton').click();" icon="ui-icon-pencil"/>
+                <p:menuitem value="#{myBundle.Delete}" onclick="document.getElementById('RegistroBloqueoListForm:deleteButton').click();" icon="ui-icon-trash"/>
+                <p:separator/>
+                <p:menuitem value="#{myBundle.RegistroBloqueoMenuItem_idUsuario}" icon="ui-icon-search"  actionListener="#{registroBloqueoController.prepareIdUsuario}" update=":UsuarioViewForm" oncomplete="PF('UsuarioViewDialog').show()" disabled="#{empty registroBloqueoController.selected.idUsuario}"/>  
+            </p:contextMenu>
+            <p:dataTable id="datalist"
+                         value="#{registroBloqueoController.items}"
+                         lazy="false"
+                         rowKey="#{item.idRegistroBloqueo}"
+                         var="item"
+                         paginator="true"
+                         rows="10"
+                         rowsPerPageTemplate="5,10,15"
+                         selectionMode="single"
+                         selection="#{registroBloqueoController.selected}">
+                <!--
+                         To enable Lazy Loading, please copy/replace the following lines above,
+                         and be sure to replace the word HASH with the # symbol:
+                
+                         value="HASH{registroBloqueoController.lazyItems}"
+                         lazy="true"
+                         rowKey="HASH{item.idRegistroBloqueo}"  <<< Remove this line
+                -->
+
+
+                <p:ajax event="rowSelect"   update="@form:createButton,@form:viewButton,@form:editButton,@form:deleteButton,@form:RegistroBloqueoDataTableContextMenu" listener="#{registroBloqueoController.resetParents}"/>
+                <p:ajax event="rowUnselect" update="@form:createButton,@form:viewButton,@form:editButton,@form:deleteButton,@form:RegistroBloqueoDataTableContextMenu" listener="#{registroBloqueoController.resetParents}"/>
+                <p:ajax event="contextMenu" update="@form:createButton @form:viewButton @form:editButton @form:deleteButton" listener="#{registroBloqueoController.resetParents}"/>
+                <p:ajax event="rowDblselect" onsuccess="document.getElementById('RegistroBloqueoListForm:viewButton').click();"/>
+
+                <p:column sortBy="#{item.idRegistroBloqueo}" filterBy="#{item.idRegistroBloqueo}">
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListRegistroBloqueoTitle_idRegistroBloqueo}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.idRegistroBloqueo}"/>
+                </p:column>
+
+
+                <p:column sortBy="#{item.intentosFallidos}" filterBy="#{item.intentosFallidos}">
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListRegistroBloqueoTitle_intentosFallidos}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.intentosFallidos}"/>
+                </p:column>
+
+
+                <p:column sortBy="#{item.fecha}" filterBy="#{item.fecha}">
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListRegistroBloqueoTitle_fecha}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.fecha}">
+                        <f:convertDateTime pattern="MM/dd/yyyy" />
+                    </h:outputText>
+                </p:column>
+
+
+                <p:column sortBy="#{item.ip}" filterBy="#{item.ip}">
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListRegistroBloqueoTitle_ip}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.ip}"/>
+                </p:column>
+
+
+                <p:column sortBy="#{item.eliminado}" filterBy="#{item.eliminado}">
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListRegistroBloqueoTitle_eliminado}"/>
+                    </f:facet>
+                    <h:selectBooleanCheckbox id="eliminado" value="#{item.eliminado}" title="#{myBundle.EditRegistroBloqueoTitle_eliminado}"  disabled="true"/>
+                </p:column>
+
+
+                <p:column sortBy="#{item.idUsuario.idUsuario}" filterBy="#{item.idUsuario.idUsuario}">
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListRegistroBloqueoTitle_idUsuario}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.idUsuario.idUsuario}"/>
+                </p:column>
+
+
+            </p:dataTable>
+
+            <p:commandButton id="createButton"                             icon="ui-icon-plus"   value="#{myBundle.Create}" actionListener="#{registroBloqueoController.prepareCreate}" update=":RegistroBloqueoCreateForm" oncomplete="PF('RegistroBloqueoCreateDialog').show()"/>
+            <p:commandButton id="viewButton"   style="visibility: hidden;" icon="ui-icon-search" value="#{myBundle.View}" update=":RegistroBloqueoViewForm" oncomplete="PF('RegistroBloqueoViewDialog').show()" disabled="#{empty registroBloqueoController.selected}"/>
+            <p:commandButton id="editButton"   style="visibility: hidden;" icon="ui-icon-pencil" value="#{myBundle.Edit}" update=":RegistroBloqueoEditForm" oncomplete="PF('RegistroBloqueoEditDialog').show()" disabled="#{empty registroBloqueoController.selected}"/>
+            <p:commandButton id="deleteButton" style="visibility: hidden;" icon="ui-icon-trash"  value="#{myBundle.Delete}" actionListener="#{registroBloqueoController.delete}" update=":growl,datalist" disabled="#{empty registroBloqueoController.selected}">
+                <p:confirm header="#{myBundle.ConfirmationHeader}" message="#{myBundle.ConfirmDeleteMessage}" icon="ui-icon-alert"/>
+            </p:commandButton>
+
+        </p:panel>
+        <ui:include src="/confirmation.xhtml"/>
+    </h:form>
+
+</ui:composition>

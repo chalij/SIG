@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="ViewListForm">
+
+        <p:panel header="#{myBundle.ListViewTitle}">
+            <p:contextMenu id="ViewDataTableContextMenu" for="datalist">  
+                <p:menuitem value="#{myBundle.Create}" onclick="document.getElementById('ViewListForm:createButton').click();" icon="ui-icon-plus"/>
+                <p:menuitem value="#{myBundle.View}" onclick="document.getElementById('ViewListForm:viewButton').click();" icon="ui-icon-search"/>
+                <p:menuitem value="#{myBundle.Edit}" onclick="document.getElementById('ViewListForm:editButton').click();" icon="ui-icon-pencil"/>
+                <p:menuitem value="#{myBundle.Delete}" onclick="document.getElementById('ViewListForm:deleteButton').click();" icon="ui-icon-trash"/>
+                <p:separator/>
+                <p:menuitem value="#{myBundle.ViewMenuItem_menuCollection}" icon="ui-icon-search"  action="#{viewController.navigateMenuCollection}" disabled="#{empty viewController.selected.menuCollection}" ajax="false"/>  
+            </p:contextMenu>
+            <p:dataTable id="datalist"
+                         value="#{viewController.items}"
+                         lazy="false"
+                         rowKey="#{item.idView}"
+                         var="item"
+                         paginator="true"
+                         rows="10"
+                         rowsPerPageTemplate="5,10,15"
+                         selectionMode="single"
+                         selection="#{viewController.selected}">
+                <!--
+                         To enable Lazy Loading, please copy/replace the following lines above,
+                         and be sure to replace the word HASH with the # symbol:
+                
+                         value="HASH{viewController.lazyItems}"
+                         lazy="true"
+                         rowKey="HASH{item.idView}"  <<< Remove this line
+                -->
+
+
+                <p:ajax event="rowSelect"   update="@form:createButton,@form:viewButton,@form:editButton,@form:deleteButton,@form:ViewDataTableContextMenu"/>
+                <p:ajax event="rowUnselect" update="@form:createButton,@form:viewButton,@form:editButton,@form:deleteButton,@form:ViewDataTableContextMenu"/>
+                <p:ajax event="contextMenu" update="@form:createButton @form:viewButton @form:editButton @form:deleteButton"/>
+                <p:ajax event="rowDblselect" onsuccess="document.getElementById('ViewListForm:viewButton').click();"/>
+
+                <p:column sortBy="#{item.idView}" filterBy="#{item.idView}">
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListViewTitle_idView}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.idView}"/>
+                </p:column>
+
+
+                <p:column sortBy="#{item.url}" filterBy="#{item.url}">
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListViewTitle_url}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.url}"/>
+                </p:column>
+
+
+                <p:column sortBy="#{item.eliminado}" filterBy="#{item.eliminado}">
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListViewTitle_eliminado}"/>
+                    </f:facet>
+                    <h:selectBooleanCheckbox id="eliminado" value="#{item.eliminado}" title="#{myBundle.EditViewTitle_eliminado}"  disabled="true"/>
+                </p:column>
+
+
+            </p:dataTable>
+
+            <p:commandButton id="createButton"                             icon="ui-icon-plus"   value="#{myBundle.Create}" actionListener="#{viewController.prepareCreate}" update=":ViewCreateForm" oncomplete="PF('ViewCreateDialog').show()"/>
+            <p:commandButton id="viewButton"   style="visibility: hidden;" icon="ui-icon-search" value="#{myBundle.View}" update=":ViewViewForm" oncomplete="PF('ViewViewDialog').show()" disabled="#{empty viewController.selected}"/>
+            <p:commandButton id="editButton"   style="visibility: hidden;" icon="ui-icon-pencil" value="#{myBundle.Edit}" update=":ViewEditForm" oncomplete="PF('ViewEditDialog').show()" disabled="#{empty viewController.selected}"/>
+            <p:commandButton id="deleteButton" style="visibility: hidden;" icon="ui-icon-trash"  value="#{myBundle.Delete}" actionListener="#{viewController.delete}" update=":growl,datalist" disabled="#{empty viewController.selected}">
+                <p:confirm header="#{myBundle.ConfirmationHeader}" message="#{myBundle.ConfirmDeleteMessage}" icon="ui-icon-alert"/>
+            </p:commandButton>
+
+        </p:panel>
+        <ui:include src="/confirmation.xhtml"/>
+    </h:form>
+
+</ui:composition>

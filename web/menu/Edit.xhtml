@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+        <p:dialog id="MenuEditDlg" widgetVar="MenuEditDialog" modal="true" resizable="false"  appendTo="@(body)" header="#{myBundle.EditMenuTitle}" closeOnEscape="true">
+
+            <h:form id="MenuEditForm">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid  columns="2" columnClasses="column" rendered="#{menuController.selected != null}">
+
+
+                        <h:outputLabel value="#{myBundle.EditMenuLabel_idMenu}" for="idMenu" />
+                        <h:outputText id="idMenu" value="#{menuController.selected.idMenu}" />
+
+                        <p:outputLabel value="#{myBundle.EditMenuLabel_descripcion}" for="descripcion" />
+                        <p:inputText id="descripcion" value="#{menuController.selected.descripcion}" title="#{myBundle.EditMenuTitle_descripcion}" required="true" requiredMessage="#{myBundle.EditMenuRequiredMessage_descripcion}" size="45" maxlength="45"/>
+
+                        <p:outputLabel value="#{myBundle.EditMenuLabel_icon}" for="icon" />
+                        <p:inputText id="icon" value="#{menuController.selected.icon}" title="#{myBundle.EditMenuTitle_icon}" size="45" maxlength="45"/>
+
+                        <p:outputLabel value="#{myBundle.EditMenuLabel_eliminado}" for="eliminado" />
+                        <p:selectBooleanCheckbox id="eliminado" value="#{menuController.selected.eliminado}" />
+
+                        <p:outputLabel value="#{myBundle.EditMenuLabel_idView}" for="idView" />
+                        <p:selectOneMenu id="idView" value="#{menuController.selected.idView}"  converter="viewConverter">
+                            <f:selectItem itemLabel="#{myBundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{viewController.items}"
+                                           var="idViewItem"
+                                           itemValue="#{idViewItem}"
+                                           itemLabel="#{idViewItem.idView.toString()}"
+                                           />
+
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="#{myBundle.EditMenuLabel_menIdMenu}" for="menIdMenu" />
+                        <p:selectOneMenu id="menIdMenu" value="#{menuController.selected.menIdMenu}"  converter="menuConverter">
+                            <f:selectItem itemLabel="#{myBundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{menuController.items}"
+                                           var="menIdMenuItem"
+                                           itemValue="#{menIdMenuItem}"
+                                           itemLabel="#{menIdMenuItem.descripcion.toString()}"
+                                           />
+
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{menuController.save}" value="#{myBundle.Save}" update="display,:MenuListForm:datalist,:growl" oncomplete="handleSubmit(xhr,status,args,PF('MenuEditDialog'));">
+                        <p:confirm header="#{myBundle.ConfirmationHeader}" message="#{myBundle.ConfirmEditMessage}" icon="ui-icon-alert"/>
+                    </p:commandButton>
+                    <p:commandButton value="#{myBundle.Cancel}" oncomplete="PF('MenuEditDialog').hide()" update="display" process="@this" immediate="true" resetValues="true"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

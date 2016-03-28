@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="RegistroBloqueoCreateDlg" widgetVar="RegistroBloqueoCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{myBundle.CreateRegistroBloqueoTitle}" closeOnEscape="true">
+
+            <h:form id="RegistroBloqueoCreateForm">
+
+                <h:panelGroup id="display" rendered="#{registroBloqueoController.selected != null}">
+                    <p:panelGrid columns="2" columnClasses="column">
+
+                        <p:outputLabel value="#{myBundle.CreateRegistroBloqueoLabel_intentosFallidos}" for="intentosFallidos" />
+                        <p:inputText id="intentosFallidos" value="#{registroBloqueoController.selected.intentosFallidos}" title="#{myBundle.CreateRegistroBloqueoTitle_intentosFallidos}" required="true" requiredMessage="#{myBundle.CreateRegistroBloqueoRequiredMessage_intentosFallidos}"/>
+
+                        <p:outputLabel value="#{myBundle.CreateRegistroBloqueoLabel_fecha}" for="fecha" />
+                        <p:calendar id="fecha" pattern="MM/dd/yyyy" value="#{registroBloqueoController.selected.fecha}" title="#{myBundle.CreateRegistroBloqueoTitle_fecha}" required="true" requiredMessage="#{myBundle.CreateRegistroBloqueoRequiredMessage_fecha}" showOn="button"/>
+
+                        <p:outputLabel value="#{myBundle.CreateRegistroBloqueoLabel_ip}" for="ip" />
+                        <p:inputText id="ip" value="#{registroBloqueoController.selected.ip}" title="#{myBundle.CreateRegistroBloqueoTitle_ip}" required="true" requiredMessage="#{myBundle.CreateRegistroBloqueoRequiredMessage_ip}" size="45" maxlength="45"/>
+
+                        <p:outputLabel value="#{myBundle.CreateRegistroBloqueoLabel_eliminado}" for="eliminado" />
+                        <p:selectBooleanCheckbox id="eliminado" value="#{registroBloqueoController.selected.eliminado}" />
+
+                        <p:outputLabel value="#{myBundle.CreateRegistroBloqueoLabel_idUsuario}" for="idUsuario" />
+                        <p:selectOneMenu id="idUsuario" value="#{registroBloqueoController.selected.idUsuario}"  converter="usuarioConverter">
+                            <f:selectItem itemLabel="#{myBundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{usuarioController.items}"
+                                           var="idUsuarioItem"
+                                           itemValue="#{idUsuarioItem}"
+                                           itemLabel="#{idUsuarioItem.idUsuario.toString()}"
+                                           />
+
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{registroBloqueoController.saveNew}" value="#{myBundle.Save}" update="display,:RegistroBloqueoListForm:datalist,:growl" oncomplete="handleSubmit(xhr,status,args,PF('RegistroBloqueoCreateDialog'));">
+                        <p:confirm header="#{myBundle.ConfirmationHeader}" message="#{myBundle.ConfirmCreateMessage}" icon="ui-icon-alert"/>
+                    </p:commandButton>
+
+                    <p:commandButton value="#{myBundle.Cancel}" oncomplete="PF('RegistroBloqueoCreateDialog').hide()" update="display" process="@this" immediate="true" resetValues="true"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pm="http://primefaces.org/mobile">
+
+    <h:form id="menuForm">
+        <p:menu>
+            <p:submenu label="#{myBundle.Maintenance}">
+                <p:menuitem value="#{myBundle.BitacoraAccensosRestringidosHeading}..." outcome="/mobile/bitacoraAccensosRestringidos/index" />
+                <p:menuitem value="#{myBundle.MenuHeading}..." outcome="/mobile/menu/index" />
+                <p:menuitem value="#{myBundle.MenuRolHeading}..." outcome="/mobile/menuRol/index" />
+                <p:menuitem value="#{myBundle.PersonaHeading}..." outcome="/mobile/persona/index" />
+                <p:menuitem value="#{myBundle.RegistroBloqueoHeading}..." outcome="/mobile/registroBloqueo/index" />
+                <p:menuitem value="#{myBundle.RolHeading}..." outcome="/mobile/rol/index" />
+                <p:menuitem value="#{myBundle.UsuarioHeading}..." outcome="/mobile/usuario/index" />
+                <p:menuitem value="#{myBundle.ViewHeading}..." outcome="/mobile/view/index" />
+            </p:submenu>
+            <p:menuitem value="#{myBundle.FullApp}" outcome="/index" icon="ui-icon-home"/>
+        </p:menu>
+    </h:form>
+</ui:composition>
