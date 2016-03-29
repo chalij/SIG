@@ -4,6 +4,7 @@ import Controller.AbstractFacade;
 import Controller.LazyEntityDataModel;
 import Bean.util.JsfUtil;
 import entidades.Menu;
+import entidades.MenuRol;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -53,13 +54,13 @@ public abstract class AbstractController<T> implements Serializable {
      * @return the menuModel
      */
     public DefaultMenuModel getMenuModel() {
-        List<Menu> models2= (List<Menu>)this.ejbFacade.findAll();
+        List<MenuRol> models2= (List<MenuRol>)this.ejbFacade.findAll();
         System.out.println("///Agregas elemento///");
         menuModel.getElements().clear();
         for(int i=0;i<models2.size();i++){
             DefaultMenuItem menuItem = new DefaultMenuItem();
-            menuItem.setValue(models2.get(i).getDescripcion());
-            menuItem.setUrl(models2.get(i).getIdView().getUrl());
+            menuItem.setValue(models2.get(i).getIdMenu().getDescripcion());
+            menuItem.setUrl(models2.get(i).getIdMenu().getIdView().getUrl());
             menuModel.addElement(menuItem);
         }    
         return menuModel;
