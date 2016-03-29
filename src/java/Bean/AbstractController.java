@@ -22,6 +22,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import org.primefaces.model.menu.DefaultMenuItem;
 import org.primefaces.model.menu.DefaultMenuModel;
+import org.primefaces.model.menu.DefaultSubMenu;
 
 /**
  * Represents an abstract shell of to be used as JSF Controller to be used in
@@ -54,14 +55,30 @@ public abstract class AbstractController<T> implements Serializable {
      * @return the menuModel
      */
     public DefaultMenuModel getMenuModel() {
-        List<MenuRol> models2= (List<MenuRol>)this.ejbFacade.findAll();
+        List<MenuRol> models2= (List<MenuRol>)this.ejbFacade.findAllCondition();
         System.out.println("///Agregas elemento///");
         menuModel.getElements().clear();
+        DefaultSubMenu subMenu = new DefaultSubMenu("chali");
+        List<MenuRol> padres=new ArrayList<MenuRol>();
         for(int i=0;i<models2.size();i++){
-            DefaultMenuItem menuItem = new DefaultMenuItem();
-            menuItem.setValue(models2.get(i).getIdMenu().getDescripcion());
-            menuItem.setUrl(models2.get(i).getIdMenu().getIdView().getUrl());
-            menuModel.addElement(menuItem);
+            if(models2.get(i).getIdMenu().getMenIdMenu()==null){
+                DefaultMenuItem menuItem = new DefaultMenuItem(models2.get(i).getIdMenu().getDescripcion());
+                menuItem.setUrl(models2.get(i).getIdMenu().getIdView().getUrl());
+                subMenu.addElement(menuItem);
+                menuModel.addElement(subMenu);
+                padres.add(models2.get(i));
+            }
+            else{
+                for(int j=0;j<padres.size();j++){
+                    if(padres.get(j).getIdMenu().getIdMenu()==models2.get(i).getIdMenu().getMenIdMenu().getIdMenu()){
+                        DefaultMenuItem item= new DefaultMenuItem(models2.get(i).getIdMenu().getDescripcion());
+                        item = new DefaultMenuItem(models2.get(i).getIdMenu().getMenIdMenu().getDescripcion());
+                        item.setUrl(models2.get(i).getIdMenu().getMenIdMenu().getIdView().getUrl());
+                        subMenu.addElement(item);
+                        menuModel.addElement(subMenu);
+                    }
+                }
+            }
         }    
         return menuModel;
     }

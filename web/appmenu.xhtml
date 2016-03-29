@@ -8,8 +8,15 @@
 
     <ui:composition>
         <h:form id="menuForm">
-            <p:menubar model="#{menuRolController.menuModel}">
-            </p:menubar>
+            <p:megaMenu>
+                
+                <p:submenu label="Gestion de Proveedores" icon="ui-icon-suitcase">
+                    
+                    <p:column>
+                        <p:menu  model="#{menuRolController.menuModel}" />
+                    </p:column>
+                </p:submenu>
+            </p:megaMenu>
         </h:form>
     </ui:composition>
 

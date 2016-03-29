@@ -48,6 +48,15 @@ public abstract class AbstractFacade<T> {
         cq.select(cq.from(entityClass));
         return getEntityManager().createQuery(cq).getResultList();
     }
+    
+    
+    public List<T> findAllCondition() {
+        javax.persistence.criteria.CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();
+        javax.persistence.criteria.Root<T> entityRoot = cq.from(entityClass);
+        cq.orderBy(getEntityManager().getCriteriaBuilder().desc(entityRoot.get("idMenu").get("menIdMenu")));
+        cq.select(entityRoot);
+        return getEntityManager().createQuery(cq).getResultList();
+    }
 
     public List<T> findRange(int[] range) {
         javax.persistence.criteria.CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();
