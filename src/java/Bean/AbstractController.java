@@ -18,11 +18,14 @@ import java.util.ResourceBundle;
 import javax.ejb.EJBException;
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
+import javax.tools.FileObject;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import org.primefaces.model.menu.DefaultMenuItem;
 import org.primefaces.model.menu.DefaultMenuModel;
 import org.primefaces.model.menu.DefaultSubMenu;
+import org.primefaces.model.menu.MenuItem;
+import org.primefaces.model.menu.Submenu;
 
 /**
  * Represents an abstract shell of to be used as JSF Controller to be used in
@@ -58,10 +61,28 @@ public abstract class AbstractController<T> implements Serializable {
         List<MenuRol> models2= (List<MenuRol>)this.ejbFacade.findAllCondition();
         System.out.println("///Agregas elemento///");
         menuModel.getElements().clear();
-        DefaultSubMenu subMenu = new DefaultSubMenu("chali");
         List<MenuRol> padres=new ArrayList<MenuRol>();
-        for(int i=0;i<models2.size();i++){
+        
+
+DefaultSubMenu opp = new DefaultSubMenu("Opportunity");
+        DefaultMenuItem newOpp = new DefaultMenuItem("New");
+        DefaultMenuItem delOpp = new DefaultMenuItem("Delete");
+        opp.addElement(newOpp);
+        opp.addElement(delOpp);
+        
+        DefaultSubMenu quote = new DefaultSubMenu("Quote");
+        DefaultMenuItem newQuote = new DefaultMenuItem("New");
+        DefaultMenuItem delQuote = new DefaultMenuItem("Delete");
+        quote.addElement(newQuote);
+        quote.addElement(delQuote);
+        
+        menuModel.addElement(opp);
+        menuModel.addElement(quote);
+
+       // menuModel.addElement(subMenu);
+       /* for(int i=0;i<models2.size();i++){
             if(models2.get(i).getIdMenu().getMenIdMenu()==null){
+                DefaultSubMenu subMenu = new DefaultSubMenu(models2.get(i).getIdMenu().getDescripcion());
                 DefaultMenuItem menuItem = new DefaultMenuItem(models2.get(i).getIdMenu().getDescripcion());
                 menuItem.setUrl(models2.get(i).getIdMenu().getIdView().getUrl());
                 subMenu.addElement(menuItem);
@@ -71,15 +92,18 @@ public abstract class AbstractController<T> implements Serializable {
             else{
                 for(int j=0;j<padres.size();j++){
                     if(padres.get(j).getIdMenu().getIdMenu()==models2.get(i).getIdMenu().getMenIdMenu().getIdMenu()){
+                        DefaultSubMenu subMenu2 = new DefaultSubMenu(models2.get(i).getIdMenu().getDescripcion());
+                        DefaultSubMenu subMenu3 = new DefaultSubMenu(models2.get(i).getIdMenu().getDescripcion());
                         DefaultMenuItem item= new DefaultMenuItem(models2.get(i).getIdMenu().getDescripcion());
                         item = new DefaultMenuItem(models2.get(i).getIdMenu().getMenIdMenu().getDescripcion());
                         item.setUrl(models2.get(i).getIdMenu().getMenIdMenu().getIdView().getUrl());
-                        subMenu.addElement(item);
-                        menuModel.addElement(subMenu);
+                        subMenu2.addElement(item);
+                        subMenu2.addElement(subMenu3);
+                        menuModel.addElement(subMenu2);
                     }
                 }
             }
-        }    
+        }    */
         return menuModel;
     }
 
